@@ -1,6 +1,7 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS,cross_origin
 
+
 # Importamos el model logistica, su ruta
 from models.logistica_model import LogisticaModel
 
@@ -15,4 +16,4 @@ model_logistica = LogisticaModel()
 @cross_origin()
 def getMateriales():
     content = model_logistica.getMaterial()
-    return jsonify(content)
+    return jsonify(content),200

@@ -12,7 +12,7 @@ class PostgresSQLPool(object):
     def __init__(self):
         self.pool = self.create_pool()
 
-    def create_pool(self, minconn=1, maxconn=10):
+    def create_pool(self, minconn=1, maxconn=0):
         pool = psycopg2.pool.ThreadedConnectionPool(
            # pool_name=pool_name,
            # pool_size=pool_size,
