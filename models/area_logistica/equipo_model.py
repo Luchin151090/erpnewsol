@@ -71,7 +71,7 @@ class EquipoModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
         
-    def deleteEquipo(self,codigo):
+    def deleteEquipo(self,id):
         conn = None
         cursor = None
         try:
@@ -79,8 +79,8 @@ class EquipoModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.equipo WHERE codigo = %s;
-            """,(codigo),True
+            DELETE FROM logistica.equipo WHERE id = %s;
+            """,(id),True
             )
             return 'Equipo deleted successfully'
         except Exception as e:
@@ -92,7 +92,7 @@ class EquipoModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
     
-    def updateEquipo(self,codigo,cantidad,stock):
+    def updateEquipo(self,id,cantidad,stock):
         conn = None
         cursor = None
         try:
@@ -100,8 +100,8 @@ class EquipoModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.equipo SET cantidad=%s,stock=%s WHERE codigo=%s;
-            """,(cantidad,stock,codigo),True
+            UPDATE logistica.equipo SET cantidad=%s,stock=%s WHERE id=%s;
+            """,(cantidad,stock,id),True
             )
             return 'Equipo updated successfully'
         except Exception as e:

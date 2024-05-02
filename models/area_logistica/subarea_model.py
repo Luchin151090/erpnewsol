@@ -66,7 +66,7 @@ class SubareaModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
         
-    def deleteSubarea(self,nombre):
+    def deleteSubarea(self,id):
         conn = None
         cursor = None
         try:
@@ -74,8 +74,8 @@ class SubareaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.subarea WHERE nombre = %s;
-            """,(nombre),True
+            DELETE FROM logistica.subarea WHERE id = %s;
+            """,(id),True
             )
             return 'Subarea deleted successfully'
         except Exception as e:
@@ -87,7 +87,7 @@ class SubareaModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
     
-    def updateSubarea(self,responsable,nombre):
+    def updateSubarea(self,responsable,id):
         conn = None
         cursor = None
         try:
@@ -95,8 +95,8 @@ class SubareaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.subarea SET responsable=%s WHERE nombre=%s;
-            """,(responsable,nombre),True
+            UPDATE logistica.subarea SET responsable=%s WHERE id=%s;
+            """,(responsable,id),True
             )
             return 'Subarea updated successfully'
         except Exception as e:

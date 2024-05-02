@@ -70,7 +70,7 @@ class LogisticaModel:
                 self.db_pool.pool.putconn(conn)
         
 
-    def deleteUsuario(self,nickname):
+    def deleteUsuario(self,id):
         conn = None
         cursor = None
         try:
@@ -78,8 +78,8 @@ class LogisticaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM relaciones.usuario WHERE nickname = %s;
-            """,(nickname),True
+            DELETE FROM relaciones.usuario WHERE id = %s;
+            """,(id),True
             )
             return 'Rol deleted successfully'
         except Exception as e:

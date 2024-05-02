@@ -69,7 +69,7 @@ class FvalModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
         
-    def deleteFval(self,nombre):
+    def deleteFval(self,id):
         conn = None
         cursor = None
         try:
@@ -77,8 +77,8 @@ class FvalModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.fval WHERE nombre = %s;
-            """,(nombre),True
+            DELETE FROM logistica.fval WHERE id = %s;
+            """,(id),True
             )
             return 'Fval deleted successfully'
         except Exception as e:
@@ -90,7 +90,7 @@ class FvalModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
     
-    def updateFval(self,cantidad,nombre):
+    def updateFval(self,cantidad,id):
         conn = None
         cursor = None
         try:
@@ -98,8 +98,8 @@ class FvalModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.fval SET cantidad=%s WHERE nombre=%s;
-            """,(cantidad,nombre),True
+            UPDATE logistica.fval SET cantidad=%s WHERE id=%s;
+            """,(cantidad,id),True
             )
             return 'Fval updated successfully'
         except Exception as e:

@@ -67,7 +67,7 @@ class LogisticaModel:
                 self.db_pool.pool.putconn(conn)
         
 
-    def deleteRoles(self,nombre):
+    def deleteRoles(self,id):
         conn = None
         cursor = None
         try:
@@ -75,8 +75,8 @@ class LogisticaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM relaciones.roles WHERE nombre = %s;
-            """,(nombre),True
+            DELETE FROM relaciones.roles WHERE id = %s;
+            """,(id),True
             )
             return 'Rol deleted successfully'
         except Exception as e:
