@@ -58,7 +58,7 @@ class MaterialModel:
             cursor.execute(
             """
             INSERT INTO logistica.material (codigo,nombre,descripcion,cantidad,stock,fecha_ingreso) VALUES (%s,%s,%s,%s,%s,%s);
-            """,(codigo,nombre,descripcion,cantidad,stock,fecha_ingreso),True
+            """,(codigo,nombre,descripcion,cantidad,stock,fecha_ingreso)
             )
             return 'Material created successfully'
         except Exception as e:

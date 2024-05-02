@@ -6,18 +6,18 @@ from flask_cors import CORS,cross_origin
 from models.area_logistica.material_model import MaterialModel
 
 # Decorador de endpoint
-blue_print = Blueprint('blue_print',__name__)
+material_blue_print = Blueprint('material_blueprint',__name__)
 
 # Crear un objeto para que nos ayude con la clase
 model_material = MaterialModel()
 
-@blue_print.route('/material',methods=['GET'])
+@material_blue_print.route('/material',methods=['GET'])
 @cross_origin()
 def getMateriales():
     content = model_material.getMaterial()
     return jsonify(content),200
 
-@blue_print.route('/material',methods=['POST'])
+@material_blue_print.route('/material',methods=['POST'])
 @cross_origin()
 def postMateriales():
     content = model_material.createMaterial(
@@ -30,7 +30,7 @@ def postMateriales():
     )
     return jsonify(content),200
 
-@blue_print.route('/material',methods=['DELETE'])
+@material_blue_print.route('/material',methods=['DELETE'])
 @cross_origin()
 def deleteMateriales():
     content = model_material.deleteMaterial(
@@ -38,7 +38,7 @@ def deleteMateriales():
     )
     return jsonify(content),200
 
-@blue_print.route('/material',methods=['PUT'])
+@material_blue_print.route('/material',methods=['PUT'])
 @cross_origin()
 def putMateriales():
     content = model_material.updateMaterial(

@@ -5,12 +5,12 @@ from flask_cors import CORS, cross_origin
 from models.area_finanzas.controlasistencia_model import ControlAsistenciaModel
 
 # Decorador de endpoint
-blue_print = Blueprint('blue_print',__name__)
+asistencia_blue_print = Blueprint('asistencia_blueprint',__name__)
 
 #Crear un objeto que nos ayude a traer la data
 model_asistencia = ControlAsistenciaModel()
 
-@blue_print.route('/asistencia',methods=['GET'])
+@asistencia_blue_print.route('/asistencia',methods=['GET'])
 @cross_origin()
 def getAsistencia():
     try:       
@@ -20,7 +20,7 @@ def getAsistencia():
         return jsonify({'error':str(e)}),500
   
 
-@blue_print.route('/asistencia',methods=['POST'])
+@asistencia_blue_print.route('/asistencia',methods=['POST'])
 @cross_origin()
 def postAsistencia():
     try:
@@ -35,7 +35,7 @@ def postAsistencia():
     except Exception as e:
         return jsonify({'error':str(e)}),500
 
-@blue_print.route('/asistencia/<int:id>',methods=['DELETE'])
+@asistencia_blue_print.route('/asistencia/<int:id>',methods=['DELETE'])
 @cross_origin()
 def deleteAsistencia(id):
     try:
@@ -49,7 +49,7 @@ def deleteAsistencia(id):
         
     
 
-@blue_print.route('/asistencia/<int:id>',methods=['PUT'])
+@asistencia_blue_print.route('/asistencia/<int:id>',methods=['PUT'])
 @cross_origin()
 def updateAsistencia(id):
     try:
