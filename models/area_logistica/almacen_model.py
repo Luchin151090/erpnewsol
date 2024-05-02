@@ -5,6 +5,8 @@ import traceback
 class AlmacenModel:
     def __init__(self):
         self.db_pool = PostgresSQLPool()
+        
+        # TABLA EQUIPO
     
     def getAlmacen(self):
         conn = None
@@ -52,7 +54,8 @@ class AlmacenModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO logistica.almacen (nombre,ubicacion) VALUES (%s,%s);
+            INSERT INTO logistica.almacen
+              (nombre,ubicacion) VALUES (%s,%s);
             """,(nombre,ubicacion),True
             )
             return 'Almacen created successfully'
@@ -64,7 +67,7 @@ class AlmacenModel:
                 cursor.close()
             if conn:
                 self.db_pool.pool.putconn(conn)
-
+        
     def deleteAlmacen(self,id):
         conn = None
         cursor = None
@@ -85,7 +88,7 @@ class AlmacenModel:
                 cursor.close()
             if conn:
                 self.db_pool.pool.putconn(conn)
-
+    
     def updateAlmacen(self,nombre,ubicacion,id):
         conn = None
         cursor = None

@@ -82,7 +82,7 @@ class CajaModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
 
-    def updateSubarea(self,id,nombre_caja,saldo_final,saldo_inicial,caja_id):
+    def updateCaja(self,id,nombre_caja,saldo_final,saldo_inicial,caja_id):
         conn = None
         cursor = None
         try:

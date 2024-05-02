@@ -51,7 +51,7 @@ CREATE TABLE logistica.equipo(
 	descripcion varchar(1000),
 	cantidad int,
 	codigo varchar(30),
-	nombre varchar(300),
+	nombre varchar(300)
 );
 
 CREATE TABLE logistica.almacen(
