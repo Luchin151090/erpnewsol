@@ -74,3 +74,4 @@ CREATE TABLE logistica.fval(
 	solicitante varchar(50),
 	area_solicitante varchar(50)
 );
+--subarea,fval,equipo,material
