@@ -3,17 +3,16 @@ from flask_cors import CORS,cross_origin
 
 
 # Importamos el model logistica, su ruta
-from models.logistica_model import LogisticaModel
+from models.area_logistica.material_model import MaterialModel
 
 # Decorador de endpoint
 blue_print = Blueprint('blue_print',__name__)
 
 # Crear un objeto para que nos ayude con la clase
-model_logistica = LogisticaModel()
-
+model_material = MaterialModel()
 
 @blue_print.route('/material',methods=['GET'])
 @cross_origin()
 def getMateriales():
-    content = model_logistica.getMaterial()
+    content = model_material.getMaterial()
     return jsonify(content),200

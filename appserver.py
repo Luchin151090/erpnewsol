@@ -1,7 +1,7 @@
 from flask import Blueprint,Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-from controllers.logistica_controller import blue_print
+from controllers.area_logistica.logistica_controller import blue_print
 import os
 
 # Cargar variables de entorno
