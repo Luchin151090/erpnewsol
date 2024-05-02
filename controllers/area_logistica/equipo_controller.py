@@ -17,7 +17,7 @@ def getEquipo():
     content = model_equipo.getEquipo()
     return jsonify(content),200
 
-@blue_print.route('/equipo',method=['POST'])
+@blue_print.route('/equipo',methods=['POST'])
 @cross_origin()
 def postEquipo():
     try:

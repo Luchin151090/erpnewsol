@@ -10,7 +10,7 @@ blue_print = Blueprint('blue_print',__name__)
 #Crear un objeto que nos ayude a traer la data
 model_caja = CajaModel()
 
-@blue_print.route('/caja',method=['GET'])
+@blue_print.route('/caja',methods=['GET'])
 @cross_origin()
 def getCaja():
     try:       
@@ -20,7 +20,7 @@ def getCaja():
         return jsonify({'error':str(e)}),500
   
 
-@blue_print.route('/caja',method=['POST'])
+@blue_print.route('/caja',methods=['POST'])
 @cross_origin()
 def postCaja():
     try:
@@ -34,7 +34,7 @@ def postCaja():
     except Exception as e:
         return jsonify({'error':str(e)}),500
 
-@blue_print.route('/caja/<int:id>',method=['DELETE'])
+@blue_print.route('/caja/<int:id>',methods=['DELETE'])
 @cross_origin()
 def deleteCaja(id):
     try:
@@ -48,7 +48,7 @@ def deleteCaja(id):
         
     
 
-@blue_print.route('/caja/<int:id>',method=['PUT'])
+@blue_print.route('/caja/<int:id>',methods=['PUT'])
 @cross_origin()
 def updateCaja(id):
     try:

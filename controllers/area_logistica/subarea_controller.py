@@ -17,7 +17,7 @@ def getSubarea():
     content = model_subarea.getSubarea()
     return jsonify(content),200
 
-@blue_print.route('/subarea',method=['POST'])
+@blue_print.route('/subarea',methods=['POST'])
 @cross_origin()
 def postsubarea():
     content = model_subarea.createSubarea(

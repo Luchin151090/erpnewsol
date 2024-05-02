@@ -17,7 +17,7 @@ def getFval():
     content = model_fval.getFval()
     return jsonify(content),200
 
-@blue_print.route('/fval',method=['POST'])
+@blue_print.route('/fval',methods=['POST'])
 @cross_origin()
 def postFval():
     content = model_fval.createFval(

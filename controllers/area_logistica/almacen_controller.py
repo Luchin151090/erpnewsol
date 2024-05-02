@@ -17,7 +17,7 @@ def getAlmacen():
     content = model_almacen.getAlmacen()
     return jsonify(content),200
 
-@blue_print.route('/almacen',method=['POST'])
+@blue_print.route('/almacen',methods=['POST'])
 @cross_origin()
 def postAlmacen():
     try:

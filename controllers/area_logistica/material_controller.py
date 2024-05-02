@@ -17,7 +17,7 @@ def getMateriales():
     content = model_material.getMaterial()
     return jsonify(content),200
 
-@blue_print.route('/material',method=['POST'])
+@blue_print.route('/material',methods=['POST'])
 @cross_origin()
 def postMateriales():
     content = model_material.createMaterial(
