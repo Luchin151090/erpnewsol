@@ -53,7 +53,7 @@ class ControlAsistenciaModel:
             """
             INSERT INTO finanzas.control_asistencia(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas)
               VALUES (%s,%s,%s,%s,%s);
-            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas),True
+            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas)
             )
             return 'Asistencia created successfully'
         except Exception as e:
