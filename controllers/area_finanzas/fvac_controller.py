@@ -1,16 +1,17 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS, cross_origin
 
+
 # Importamos model de asistencia
 from models.area_finanzas.fvac_model import FvacModel
 
 # Decorador de endpoint
-blue_print = Blueprint('blue_print',__name__)
+fvac_blue_print = Blueprint('fvac_blueprint',__name__)
 
 #Crear un objeto que nos ayude a traer la data
 model_fvac = FvacModel()
 
-@blue_print.route('/fvac',methods=['GET'])
+@fvac_blue_print.route('/fvac',methods=['GET'])
 @cross_origin()
 def getCaja():
     try:       
@@ -20,7 +21,7 @@ def getCaja():
         return jsonify({'error':str(e)}),500
   
 
-@blue_print.route('/fvac',methods=['POST'])
+@fvac_blue_print.route('/fvac',methods=['POST'])
 @cross_origin()
 def postCaja():
     try:
@@ -33,7 +34,7 @@ def postCaja():
     except Exception as e:
         return jsonify({'error':str(e)}),500
 
-@blue_print.route('/fvac/<int:id>',methods=['DELETE'])
+@fvac_blue_print.route('/fvac/<int:id>',methods=['DELETE'])
 @cross_origin()
 def deleteCaja(id):
     try:
@@ -47,7 +48,7 @@ def deleteCaja(id):
         
     
 
-@blue_print.route('/fvac/<int:id>',methods=['PUT'])
+@fvac_blue_print.route('/fvac/<int:id>',methods=['PUT'])
 @cross_origin()
 def updateCaja(id):
     try:

@@ -1,6 +1,7 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS, cross_origin
-
+import psycopg2
+from psycopg2 import IntegrityError, DataError, InternalError,Error
 # Importamos model de asistencia
 from models.area_finanzas.controlasistencia_model import ControlAsistenciaModel
 
@@ -20,7 +21,7 @@ def getAsistencia():
         return jsonify({'error':str(e)}),500
   
 
-@asistencia_blue_print.route('/asistencia',methods=['POST'])
+@asistencia_blue_print.route('/asistencia', methods=['POST'])
 @cross_origin()
 def postAsistencia():
     try:
@@ -31,9 +32,20 @@ def postAsistencia():
             request.json['nombre_empleado'],
             request.json['cantidad_horas']
         )
-        return jsonify(content),201
+        if content:
+            return jsonify(content), 201
+        else:
+            return jsonify({'error': 'No se pudo crear'}), 404
+    except IntegrityError as e:
+        return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
+    except DataError as e:
+        return jsonify({'error': 'DataError: ' + str(e)}), 400
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error': str(e)}), 500
 
 @asistencia_blue_print.route('/asistencia/<int:id>',methods=['DELETE'])
 @cross_origin()
@@ -49,7 +61,7 @@ def deleteAsistencia(id):
         
     
 
-@asistencia_blue_print.route('/asistencia/<int:id>',methods=['PUT'])
+@asistencia_blue_print.route('/asistencia/<int:id>', methods=['PUT'])
 @cross_origin()
 def updateAsistencia(id):
     try:
@@ -58,8 +70,14 @@ def updateAsistencia(id):
             request.json['hora_salida'],
             request.json['fecha'],
             request.json['nombre_empleado'],
-            request.json['cantidad_horas'] 
+            request.json['cantidad_horas']
         )
-        return jsonify(content),200
+        return jsonify(content), 200
+    except IntegrityError as e:
+        return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
+    except DataError as e:
+        return jsonify({'error': 'DataError: ' + str(e)}), 400
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error': str(e)}), 500

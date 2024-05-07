@@ -47,20 +47,27 @@ class PostgresSQLPool(object):
     def execute(self, sql, args=None, commit=False):
         conn = self.pool.getconn()
         cursor = conn.cursor()
+        try:
+            if args:
+                cursor.execute(sql, args)
+            else:
+                cursor.execute(sql)
 
-        if args:
-            cursor.execute(sql, args)
-        else:
-            cursor.execute(sql)
-
-        if commit:
-            conn.commit()
-            self.close(conn, cursor)
-            return cursor
-        else:
-            res = cursor.fetchall()
-            self.close(conn, cursor)
-            return res
+            if commit:
+                conn.commit()
+                #self.close(conn, cursor)
+                #return cursor
+        except Exception as e:
+            conn.rollback()
+            raise e
+            print(str(e))
+        finally:
+            if commit:
+                self.close(conn,cursor)
+            else:
+                res = cursor.fetchall()
+                self.close(conn, cursor)
+                return res
 
     def executemany(self, sql, args, commit=True):
         conn = self.pool.getconn()
