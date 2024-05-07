@@ -14,34 +14,48 @@ model_fval = FvalModel()
 @blue_print.route('/fval',methods=['GET'])
 @cross_origin()
 def getFval():
-    content = model_fval.getFval()
-    return jsonify(content),200
+    try:
+        content = model_fval.getFval()
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
 @blue_print.route('/fval',methods=['POST'])
 @cross_origin()
 def postFval():
-    content = model_fval.createFval(
-        request.json['nombre'],
-        request.json['cantidad'],
-        request.json['fecha_req'],
-        request.json['solicitante'],
-        request.json['area_solicitante']
-    )
-    return jsonify(content),200
+    try:
+        content = model_fval.createFval(
+            request.json['nombre'],
+            request.json['cantidad'],
+            request.json['fecha_req'],
+            request.json['solicitante'],
+            request.json['area_solicitante']
+        )
+        return jsonify(content),201
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/fval',methods=['DELETE'])
+@blue_print.route('/fval/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteFval():
-    content = model_fval.deleteFval(
-        request.json['id']
-    )
-    return jsonify(content),200
+def deleteFval(id):
+    try:
+        content = model_fval.deleteFval(id)
+        if content:
+            return jsonify({'mensaje':'fval delete successfuly'}),200
+        else:
+            return jsonify({'error':'no se encontro el ID'}),404
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/fval',methods=['PUT'])
+
+@blue_print.route('/fval/<int:id>',methods=['PUT'])
 @cross_origin()
-def putFval():
-    content = model_fval.updateFval(
-        request.json['cantidad'],
-        request.json['id']
-    )
-    return jsonify(content),200
+def putFval(id):
+    try:
+        content = model_fval.updateFval(
+            request.json['cantidad'],
+            id
+        )
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500

@@ -14,8 +14,12 @@ model_almacen = AlmacenModel()
 @blue_print.route('/almacen',methods=['GET'])
 @cross_origin()
 def getAlmacen():
-    content = model_almacen.getAlmacen()
-    return jsonify(content),200
+    try:
+        content = model_almacen.getAlmacen()
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
+
 
 @blue_print.route('/almacen',methods=['POST'])
 @cross_origin()

@@ -70,7 +70,7 @@ class MaterialModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
         
-    def deleteMaterial(self,codigo):
+    def deleteMaterial(self,id):
         conn = None
         cursor = None
         try:
@@ -78,8 +78,8 @@ class MaterialModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.material WHERE codigo = %s;
-            """,(codigo),True
+            DELETE FROM logistica.material WHERE id = %s;
+            """,(id),True
             )
             return 'Material deleted successfully'
         except Exception as e:
@@ -91,7 +91,7 @@ class MaterialModel:
             if conn:
                 self.db_pool.pool.putconn(conn)
     
-    def updateMaterial(self,codigo,cantidad,stock):
+    def updateMaterial(self,id,cantidad,stock):
         conn = None
         cursor = None
         try:
@@ -99,8 +99,8 @@ class MaterialModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE cars SET cantidad=%s,stock=%s WHERE codigo=%s;
-            """,(cantidad,stock,codigo),True
+            UPDATE cars SET cantidad=%s,stock=%s WHERE id=%s;
+            """,(cantidad,stock,id),True
             )
             return 'Material updated successfully'
         except Exception as e:

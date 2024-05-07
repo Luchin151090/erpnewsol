@@ -14,36 +14,49 @@ model_material = MaterialModel()
 @blue_print.route('/material',methods=['GET'])
 @cross_origin()
 def getMateriales():
-    content = model_material.getMaterial()
-    return jsonify(content),200
+    try:
+        content = model_material.getMaterial()
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
 @blue_print.route('/material',methods=['POST'])
 @cross_origin()
 def postMateriales():
-    content = model_material.createMaterial(
-        request.json['codigo'],
-        request.json['nombre'],
-        request.json['descripcion'],
-        request.json['cantidad'],
-        request.json['stock'],
-        request.json['fecha_ingreso']
-    )
-    return jsonify(content),200
+    try:
+        content = model_material.createMaterial(
+            request.json['codigo'],
+            request.json['nombre'],
+            request.json['descripcion'],
+            request.json['cantidad'],
+            request.json['stock'],
+            request.json['fecha_ingreso']
+        )
+        return jsonify(content),201
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/material',methods=['DELETE'])
+@blue_print.route('/material/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteMateriales():
-    content = model_material.deleteMaterial(
-        request.json['codigo']
-    )
-    return jsonify(content),200
+def deleteMateriales(id):
+    try:
+        content = model_material.deleteMaterial(id)
+        if content:
+            return jsonify({'mensaje':'material delete successfuly'}),200
+        else:
+            return jsonify({'error':'no se encontro el ID'}),404
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/material',methods=['PUT'])
+@blue_print.route('/material/<int:id>',methods=['PUT'])
 @cross_origin()
-def putMateriales():
-    content = model_material.updateMaterial(
-        request.json['codigo'],
-        request.json['cantidad'],
-        request.json['stock']
-    )
-    return jsonify(content),200
+def putMateriales(id):
+    try:
+        content = model_material.updateMaterial(
+            id,
+            request.json['cantidad'],
+            request.json['stock']
+        )
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500

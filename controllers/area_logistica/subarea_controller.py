@@ -14,31 +14,44 @@ model_subarea = SubareaModel()
 @blue_print.route('/subarea',methods=['GET'])
 @cross_origin()
 def getSubarea():
-    content = model_subarea.getSubarea()
-    return jsonify(content),200
+    try:
+        content = model_subarea.getSubarea()
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
 @blue_print.route('/subarea',methods=['POST'])
 @cross_origin()
 def postsubarea():
-    content = model_subarea.createSubarea(
-        request.json['nombre'],
-        request.json['responsable']
-    )
-    return jsonify(content),200
+    try:
+        content = model_subarea.createSubarea(
+            request.json['nombre'],
+            request.json['responsable']
+        )
+        return jsonify(content),201
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/subarea',methods=['DELETE'])
+@blue_print.route('/subarea/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deletesubarea():
-    content = model_subarea.deleteSubarea(
-        request.json['id']
-    )
-    return jsonify(content),200
+def deletesubarea(id):
+    try:
+        content = model_subarea.deleteSubarea(id)
+        if content:
+            return jsonify({'mensaje':'subarea delete successfuly'}),200
+        else:
+            return jsonify({'error':'no se encontro el ID'}),404
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
-@blue_print.route('/subarea',methods=['PUT'])
+@blue_print.route('/subarea/<int:id>',methods=['PUT'])
 @cross_origin()
-def putsubarea():
-    content = model_subarea.updateSubarea(
-        request.json['responsable'],
-        request.json['id']
-    )
-    return jsonify(content),200
+def putsubarea(id):
+    try:
+        content = model_subarea.updateSubarea(
+            request.json['responsable'],
+            id
+        )        
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500

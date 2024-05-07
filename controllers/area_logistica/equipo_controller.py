@@ -14,8 +14,11 @@ model_equipo = EquipoModel()
 @blue_print.route('/equipo',methods=['GET'])
 @cross_origin()
 def getEquipo():
-    content = model_equipo.getEquipo()
-    return jsonify(content),200
+    try:
+        content = model_equipo.getEquipo()
+        return jsonify(content),200
+    except Exception as e:
+        return jsonify({'error':str(e)}),500
 
 @blue_print.route('/equipo',methods=['POST'])
 @cross_origin()
