@@ -8,6 +8,10 @@ dbconfig = {
     "database": "erpsol"
 }
 
+def begin():
+    conn = psycopg2.connect(**dbconfig)
+    return conn
+
 class PostgresSQLPool(object):
     def __init__(self):
         self.pool = self.create_pool()

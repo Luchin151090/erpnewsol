@@ -1,7 +1,7 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS, cross_origin
 import psycopg2
-from psycopg2 import IntegrityError, DataError, InternalError,Error
+from psycopg2 import InternalError,Error
 # Importamos model de asistencia
 from models.area_finanzas.controlasistencia_model import ControlAsistenciaModel
 
@@ -18,7 +18,7 @@ def getAsistencia():
         content = model_asistencia.getAsistencia()
         return jsonify(content),200
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller': str(e)}), 500
   
 
 @asistencia_blue_print.route('/asistencia', methods=['POST'])
@@ -26,26 +26,21 @@ def getAsistencia():
 def postAsistencia():
     try:
         content = model_asistencia.createAsistencia(
-            request.json['hora_ingreso'],
-            request.json['hora_salida'],
-            request.json['fecha'],
-            request.json['nombre_empleado'],
-            request.json['cantidad_horas']
-        )
+        request.json['hora_ingreso'],
+        request.json['hora_salida'],
+        request.json['fecha'],
+        request.json['nombre_empleado'],
+        request.json['cantidad_horas'])
         if content:
-            return jsonify(content), 201
+            return content
         else:
-            return jsonify({'error': 'No se pudo crear'}), 404
-    except IntegrityError as e:
-        return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
-    except DataError as e:
-        return jsonify({'error': 'DataError: ' + str(e)}), 400
+            return jsonify({'error': 'No se pudo crear'}), 500
     except InternalError as e:
         return jsonify({'error': 'InternalError: ' + str(e)}), 500
     except Error as e:
         return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error controller': str(e)}), 500
 
 @asistencia_blue_print.route('/asistencia/<int:id>',methods=['DELETE'])
 @cross_origin()
@@ -53,11 +48,15 @@ def deleteAsistencia(id):
     try:
         content = model_asistencia.deleteAsistencia(id)
         if content:
-            return jsonify({'mensaje':'asistencia delete successfuly'}),200
+            return content
         else:
-            return jsonify({'error':'no se encontro el ID'}),404
+            return jsonify({'error': 'no se encontro el ID'}), 500
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller': str(e)}), 500
         
     
 
@@ -72,12 +71,13 @@ def updateAsistencia(id):
             request.json['nombre_empleado'],
             request.json['cantidad_horas']
         )
-        return jsonify(content), 200
-    except IntegrityError as e:
-        return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
-    except DataError as e:
-        return jsonify({'error': 'DataError: ' + str(e)}), 400
+        if content:
+            return content
+        else:
+            return jsonify({'error': 'no se encontro el ID'}), 500
     except InternalError as e:
         return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error controller': str(e)}), 500

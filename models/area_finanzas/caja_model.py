@@ -1,6 +1,8 @@
-from config import PostgresSQLPool
-from flask import request
+from config import PostgresSQLPool, begin
+from psycopg2 import DataError, IntegrityError
+from flask import request, jsonify
 import traceback
+import psycopg2.pool
 
 class CajaModel:
     def __init__(self):
@@ -10,7 +12,7 @@ class CajaModel:
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             # sql
             query = cursor.execute(
@@ -30,78 +32,101 @@ class CajaModel:
                 }
                 datos.append(contenido)
                 contenido={}
+            conn.commit()
             return datos
         except Exception as e:
             traceback.print_exc()
+            return str(e)
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
     def createCaja(self,nombre_caja,saldo_final,saldo_inicial,caja_id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
                 """
                 INSERT INTO finanzas.caja(nombre_caja,saldo_final,saldo_inicial,caja_id)
                 VALUES(%s,%s,%s,%s);
-                """,(nombre_caja,saldo_final,saldo_inicial,caja_id),True
+                """,(nombre_caja,saldo_final,saldo_inicial,caja_id)
             )
-            return 'Caja created succesfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Caja created successfully'}),201
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
     def deleteCaja(self,id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             DELETE FROM finanzas.caja WHERE id = %s;
-            """,(id),True
+            """,(id,)
             )
-            return 'Caja deleted successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Caja delete successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
     def updateCaja(self,id,nombre_caja,saldo_final,saldo_inicial,caja_id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             UPDATE finanzas.caja SET nombre_caja=%s,saldo_final=%s,saldo_inicial=%s,caja_id=%s WHERE id=%s;
-            """,(nombre_caja,saldo_final,saldo_inicial,caja_id,id),True
+            """,(nombre_caja,saldo_final,saldo_inicial,caja_id,id)
             )
-            return 'Caja updated successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Caja updated successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
 if __name__=="__main__":
     pass

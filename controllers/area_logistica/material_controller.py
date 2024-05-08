@@ -36,7 +36,7 @@ def postMateriales():
     except Exception as e:
         return jsonify({'error':str(e)}),500
 
-@blue_print.route('/material/<int:id>',methods=['DELETE'])
+@material_blue_print.route('/material/<int:id>',methods=['DELETE'])
 @cross_origin()
 def deleteMateriales(id):
     try:
@@ -48,7 +48,7 @@ def deleteMateriales(id):
     except Exception as e:
         return jsonify({'error':str(e)}),500
 
-@blue_print.route('/material',methods=['PUT'])
+@material_blue_print.route('/material/<int:id>',methods=['PUT'])
 @cross_origin()
 def putMateriales(id):
     try:
