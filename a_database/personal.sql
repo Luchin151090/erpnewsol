@@ -12,5 +12,6 @@ CREATE TABLE personal.empleado(
 	usuario_id int unique,
 	nombre varchar(200),
 	apellidos varchar(200),
-	dni varchar(20)
+	dni varchar(20),
+	area_id int
 );
