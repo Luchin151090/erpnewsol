@@ -1,5 +1,6 @@
-from config import PostgresSQLPool
-from flask import request
+from config import PostgresSQLPool, begin
+from psycopg2 import DataError, IntegrityError
+from flask import request, jsonify
 import traceback
 
 class AlmacenModel:
@@ -12,7 +13,7 @@ class AlmacenModel:
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
 
             query = cursor.execute(
@@ -36,6 +37,7 @@ class AlmacenModel:
                 }
                 datos.append(contenido)
                 contenido={}
+            conn.commit()
             return datos
         except Exception as e:
             traceback.print_exc()
@@ -44,71 +46,92 @@ class AlmacenModel:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
     def createAlmacen(self,nombre,ubicacion):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             INSERT INTO logistica.almacen
               (nombre,ubicacion) VALUES (%s,%s);
-            """,(nombre,ubicacion),True
+            """,(nombre,ubicacion)
             )
-            return 'Almacen created successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Almacen created successfully'}),201
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
         
     def deleteAlmacen(self,id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             DELETE FROM logistica.almacen WHERE id = %s;
-            """,(id),True
+            """,(id,)
             )
-            return 'Almacen deleted successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Almacen delete successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
     
     def updateAlmacen(self,nombre,ubicacion,id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             UPDATE logistica.almacen SET nombre=%s,ubicacion=%s WHERE id=%s;
-            """,(nombre,ubicacion,id),True
+            """,(nombre,ubicacion,id)
             )
-            return 'Almacen updated successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Almacen updated successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
 if __name__=="__main__":
     almacen_model = AlmacenModel()

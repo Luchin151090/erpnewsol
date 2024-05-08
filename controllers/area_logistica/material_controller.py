@@ -1,6 +1,6 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS,cross_origin
-
+from psycopg2 import InternalError,Error
 
 # Importamos el model logistica, su ruta
 from models.area_logistica.material_model import MaterialModel
@@ -18,7 +18,7 @@ def getMateriales():
         content = model_material.getMaterial()
         return jsonify(content),200
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller':str(e)}),500
 
 @material_blue_print.route('/material',methods=['POST'])
 @cross_origin()
@@ -32,9 +32,16 @@ def postMateriales():
             request.json['stock'],
             request.json['fecha_ingreso']
         )
-        return jsonify(content),201
+        if content:
+            return content
+        else:
+            return jsonify({'error': 'No se pudo crear'}), 500
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller': str(e)}), 500
 
 @material_blue_print.route('/material/<int:id>',methods=['DELETE'])
 @cross_origin()
@@ -42,11 +49,15 @@ def deleteMateriales(id):
     try:
         content = model_material.deleteMaterial(id)
         if content:
-            return jsonify({'mensaje':'material delete successfuly'}),200
+            return content
         else:
-            return jsonify({'error':'no se encontro el ID'}),404
+            return jsonify({'error': 'no se encontro el ID'}), 500
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller': str(e)}), 500
 
 @material_blue_print.route('/material/<int:id>',methods=['PUT'])
 @cross_origin()
@@ -57,6 +68,13 @@ def putMateriales(id):
             request.json['cantidad'],
             request.json['stock']
         )
-        return jsonify(content),200
+        if content:
+            return content
+        else:
+            return jsonify({'error': 'no se encontro el ID'}), 500
+    except InternalError as e:
+        return jsonify({'error': 'InternalError: ' + str(e)}), 500
+    except Error as e:
+        return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
-        return jsonify({'error':str(e)}),500
+        return jsonify({'error controller': str(e)}), 500

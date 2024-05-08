@@ -1,5 +1,6 @@
-from config import PostgresSQLPool
-from flask import request
+from config import PostgresSQLPool, begin
+from psycopg2 import DataError, IntegrityError
+from flask import request, jsonify
 import traceback
 
 class SubareaModel:
@@ -11,7 +12,7 @@ class SubareaModel:
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
 
             query = cursor.execute(
@@ -35,6 +36,7 @@ class SubareaModel:
                 }
                 datos.append(contenido)
                 contenido={}
+            conn.commit()
             return datos
         except Exception as e:
             traceback.print_exc()
@@ -43,70 +45,91 @@ class SubareaModel:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
 
     def createSubarea(self,nombre,responsable):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             INSERT INTO logistica.subarea (nombre,responsable) VALUES (%s,%s);
-            """,(nombre,responsable),True
+            """,(nombre,responsable)
             )
-            return 'Subarea created successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Subarea created successfully'}),201
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
         
     def deleteSubarea(self,id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             DELETE FROM logistica.subarea WHERE id = %s;
-            """,(id),True
+            """,(id,)
             )
-            return 'Subarea deleted successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Subarea delete successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
     
     def updateSubarea(self,responsable,id):
         conn = None
         cursor = None
         try:
-            conn = self.db_pool.pool.getconn()
+            conn = begin()
             cursor = conn.cursor()
             cursor.execute(
             """
             UPDATE logistica.subarea SET responsable=%s WHERE id=%s;
-            """,(responsable,id),True
+            """,(responsable,id)
             )
-            return 'Subarea updated successfully'
+            conn.commit()
+            return jsonify({'mensaje': 'Subarea updated successfully'}),200
+        except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
+            traceback.print_exc()
+            return jsonify({'error': 'DataError: ' + str(e)}),400
+        except IntegrityError as e:
+            traceback.print_exc()
+            return jsonify({'error': 'IntegrityError: ' + str(e)}), 400
         except Exception as e:
             traceback.print_exc()
-            return str(e)
+            return jsonify({'error model': str(e)}), 500
         finally:
             if cursor:
                 cursor.close()
             if conn:
-                self.db_pool.pool.putconn(conn)
+                conn.close()
     
 if __name__=="__main__":
     subarea_model = SubareaModel()

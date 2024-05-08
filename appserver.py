@@ -5,9 +5,10 @@ import os
 
 # rutas-controller-logistica
 from controllers.area_logistica.material_controller import material_blue_print as material
-
-
-
+from controllers.area_logistica.almacen_controller import almacen_blue_print as almacen
+from controllers.area_logistica.equipo_controller import equipo_blue_print as equipo
+from controllers.area_logistica.fval_controller import fval_blue_print as fval
+from controllers.area_logistica.subarea_controller import subarea_blue_print as subarea
 # rutas-controller-finanzas
 from controllers.area_finanzas.controlasistencia_controller import asistencia_blue_print as asistencia
 from controllers.area_finanzas.caja_controller import caja_blue_print as caja
@@ -20,8 +21,14 @@ app = Flask(__name__)
 
 # Registrar los blueprints
 app.url_map.strict_slashes=False
-app.register_blueprint(caja,url_prefix='/api')
+##logistica
 app.register_blueprint(material,url_prefix='/api')
+app.register_blueprint(almacen,url_prefix='/api')
+app.register_blueprint(equipo,url_prefix='/api')
+app.register_blueprint(fval,url_prefix='/api')
+app.register_blueprint(subarea,url_prefix='/api')
+##finanzas
+app.register_blueprint(caja,url_prefix='/api')
 app.register_blueprint(asistencia,url_prefix='/api')
 app.register_blueprint(fvac,url_prefix='/api')
 
