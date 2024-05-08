@@ -10,3 +10,10 @@ CREATE SCHEMA mantenimiento;
 CREATE SCHEMA produccion;
 CREATE SCHEMA comercial;
 CREATE SCHEMA finanzas;
+
+
+CREATE TABLE area.area(
+	id serial primary key,
+	codigo_area varchar(200),
+    jefe_id int
+);
