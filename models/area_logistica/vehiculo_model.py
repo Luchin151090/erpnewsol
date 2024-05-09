@@ -3,12 +3,13 @@ from psycopg2 import DataError, IntegrityError
 from flask import request, jsonify
 import traceback
 
-class MaterialModel:
+class VehiculoModel:
     def __init__(self):
         self.db_pool = PostgresSQLPool()
-
-    # TABLA MATERIAL
-    def getMaterial(self):
+        
+        # TABLA LOTES
+    
+    def getVehiculo(self):
         conn = None
         cursor = None
         try:
@@ -17,7 +18,7 @@ class MaterialModel:
 
             query = cursor.execute(
                 """
-                SELECT * FROM logistica.material;
+                SELECT * FROM logistica.vehiculo;
                 """
             )
             # LISTA PARA RECIBIR LA DATA
@@ -31,13 +32,9 @@ class MaterialModel:
             for row in data:
                 contenido = {
                     'id':row[0],
-                    'codigo':row[1],
-                    'nombre':row[2],
-                    'descripcion':row[3],
-                    'cantidad':row[4],
-                    'stock':row[5],
-                    'fecha_ingreso':row[6],
-                    'almacen_id': row[7]
+                    'nombre':row[1],
+                    'capacidad':row[2],
+                    'carga_neta':row[3]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -52,7 +49,7 @@ class MaterialModel:
             if conn:
                 conn.close()
 
-    def createMaterial(self,codigo,nombre,descripcion,cantidad,stock,fecha_ingreso,almacen_id):
+    def createVehiculo(self,nombre,capacidad,carga_neta):
         conn = None
         cursor = None
         try:
@@ -60,11 +57,12 @@ class MaterialModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO logistica.material (codigo,nombre,descripcion,cantidad,stock,fecha_ingreso,almacen_id) VALUES (%s,%s,%s,%s,%s,%s,%s);
-            """,(codigo,nombre,descripcion,cantidad,stock,fecha_ingreso,almacen_id)
+            INSERT INTO logistica.vehiculo
+              (nombre,capacidad,carga_neta) VALUES (%s,%s,%s);
+            """,(nombre,capacidad,carga_neta)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Material created successfully'}),201
+            return jsonify({'mensaje': 'Vehiculo created successfully'}),201
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -80,7 +78,7 @@ class MaterialModel:
             if conn:
                 conn.close()
         
-    def deleteMaterial(self,id):
+    def deleteVehiculo(self,id):
         conn = None
         cursor = None
         try:
@@ -88,11 +86,11 @@ class MaterialModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.material WHERE id = %s;
+            DELETE FROM logistica.vehiculo WHERE id = %s;
             """,(id,)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Material delete successfully'}),200
+            return jsonify({'mensaje': 'Vehiculo delete successfully'}),200
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -108,7 +106,7 @@ class MaterialModel:
             if conn:
                 conn.close()
     
-    def updateMaterial(self,id,cantidad,stock,almacen_id):
+    def updateVehiculo(self,carga_neta,id):
         conn = None
         cursor = None
         try:
@@ -116,11 +114,11 @@ class MaterialModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE cars SET cantidad=%s,stock=%s,almacen_id=%s WHERE id=%s;
-            """,(cantidad,stock,almacen_id,id)
+            UPDATE logistica.producto SET carga_neta=%s WHERE id=%s;
+            """,(carga_neta,id)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Material updated successfully'}),200
+            return jsonify({'mensaje': 'Vehiculo updated successfully'}),200
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -136,7 +134,5 @@ class MaterialModel:
             if conn:
                 conn.close()
 
-
 if __name__=="__main__":
-    material_model = MaterialModel()
-    
+    vehiculo_model = VehiculoModel()

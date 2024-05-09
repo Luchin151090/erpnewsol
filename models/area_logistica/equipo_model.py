@@ -18,7 +18,7 @@ class EquipoModel:
 
             query = cursor.execute(
                 """
-                SELECT * FROM logistica.equipo;
+                SELECT * FROM logistica.equipo_herramienta;
                 """
             )
             # LISTA PARA RECIBIR LA DATA
@@ -37,7 +37,8 @@ class EquipoModel:
                     'descripcion':row[3],
                     'cantidad':row[4],
                     'codigo':row[5],
-                    'nombre':row[6]
+                    'nombre':row[6],
+                    'almacen_id':row[7]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -52,7 +53,7 @@ class EquipoModel:
             if conn:
                 conn.close()
 
-    def createEquipo(self,stock,fecha,descripcion,cantidad,codigo,nombre):
+    def createEquipo(self,stock,fecha,descripcion,cantidad,codigo,nombre,almacen_id):
         conn = None
         cursor = None
         try:
@@ -60,8 +61,8 @@ class EquipoModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO logistica.equipo (stock,fecha,descripcion,cantidad,codigo,nombre) VALUES (%s,%s,%s,%s,%s,%s);
-            """,(codigo,nombre,descripcion,cantidad,stock,fecha)
+            INSERT INTO logistica.equipo_herramienta (stock,fecha,descripcion,cantidad,codigo,nombre,almacen_id) VALUES (%s,%s,%s,%s,%s,%s,%s);
+            """,(stock,fecha,descripcion,cantidad,codigo,nombre,almacen_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Equipo created successfully'}),201
@@ -88,7 +89,7 @@ class EquipoModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM logistica.equipo WHERE id = %s;
+            DELETE FROM logistica.equipo_herramienta WHERE id = %s;
             """,(id,)
             )
             conn.commit()
@@ -108,7 +109,7 @@ class EquipoModel:
             if conn:
                 conn.close()
     
-    def updateEquipo(self,id,cantidad,stock):
+    def updateEquipo(self,id,cantidad,stock,almacen_id):
         conn = None
         cursor = None
         try:
@@ -116,8 +117,8 @@ class EquipoModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.equipo SET cantidad=%s,stock=%s WHERE id=%s;
-            """,(cantidad,stock,id)
+            UPDATE logistica.equipo_herramienta SET cantidad=%s,stock=%s,almacen_id=%s WHERE id=%s;
+            """,(cantidad,stock,almacen_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Equipo updated successfully'}),200

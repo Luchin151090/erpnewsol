@@ -26,7 +26,8 @@ def postsubarea():
     try:
         content = model_subarea.createSubarea(
             request.json['nombre'],
-            request.json['responsable']
+            request.json['responsable'],
+            request.json['area_logistica_id']
         )
         if content:
             return content
@@ -61,7 +62,8 @@ def putsubarea(id):
     try:
         content = model_subarea.updateSubarea(
             request.json['responsable'],
-            id
+            id,
+            request.json['area_logistica_id']
         )        
         if content:
             return content

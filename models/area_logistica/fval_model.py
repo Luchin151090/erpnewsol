@@ -35,7 +35,8 @@ class FvalModel:
                     'cantidad':row[2],
                     'fecha_req':row[3],
                     'solicitante':row[4],
-                    'area_solicitante':row[5]
+                    'area_solicitante':row[5],
+                    'area_logistica_id':row[6]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -50,7 +51,7 @@ class FvalModel:
             if conn:
                 conn.close()
 
-    def createFval(self,nombre,cantidad,fecha_req,solicitante,area_solicitante):
+    def createFval(self,nombre,cantidad,fecha_req,solicitante,area_solicitante,area_logistica_id):
         conn = None
         cursor = None
         try:
@@ -58,8 +59,8 @@ class FvalModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO logistica.fval (nombre,cantidad,fecha_req,solicitante,area_solicitante) VALUES (%s,%s,%s,%s,%s);
-            """,(nombre,cantidad,fecha_req,solicitante,area_solicitante)
+            INSERT INTO logistica.fval (nombre,cantidad,fecha_req,solicitante,area_solicitante,area_logistica_id) VALUES (%s,%s,%s,%s,%s,%s);
+            """,(nombre,cantidad,fecha_req,solicitante,area_solicitante,area_logistica_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Fval created successfully'}),201
@@ -106,7 +107,7 @@ class FvalModel:
             if conn:
                 conn.close()
     
-    def updateFval(self,cantidad,id):
+    def updateFval(self,cantidad,id,area_logistica_id):
         conn = None
         cursor = None
         try:
@@ -114,8 +115,8 @@ class FvalModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.fval SET cantidad=%s WHERE id=%s;
-            """,(cantidad,id)
+            UPDATE logistica.fval SET cantidad=%s,area_logistica_id=%s WHERE id=%s;
+            """,(cantidad,area_logistica_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Fval updated successfully'}),200

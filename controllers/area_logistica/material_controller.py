@@ -30,7 +30,8 @@ def postMateriales():
             request.json['descripcion'],
             request.json['cantidad'],
             request.json['stock'],
-            request.json['fecha_ingreso']
+            request.json['fecha_ingreso'],
+            request.json['almacen_id']
         )
         if content:
             return content
@@ -66,7 +67,8 @@ def putMateriales(id):
         content = model_material.updateMaterial(
             id,
             request.json['cantidad'],
-            request.json['stock']
+            request.json['stock'],
+            request.json['almacen_id']
         )
         if content:
             return content

@@ -29,7 +29,8 @@ def postFval():
             request.json['cantidad'],
             request.json['fecha_req'],
             request.json['solicitante'],
-            request.json['area_solicitante']
+            request.json['area_solicitante'],
+            request.json['area_logistica_id']
         )
         if content:
             return content
@@ -65,7 +66,8 @@ def putFval(id):
     try:
         content = model_fval.updateFval(
             request.json['cantidad'],
-            id
+            id,
+            request.json['area_logistica_id']
         )
         if content:
             return content

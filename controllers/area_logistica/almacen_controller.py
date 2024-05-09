@@ -27,7 +27,8 @@ def postAlmacen():
     try:
         content = model_almacen.createAlmacen(
             request.json['nombre'],
-            request.json['ubicacion']
+            request.json['ubicacion'],
+            request.json['area_logistica_id']
         )
         if content:
             return content
@@ -65,6 +66,7 @@ def putAlmacen(id):
         content = model_almacen.updateAlmacen(
             request.json['nombre'],
             request.json['ubicacion'],
+            request.json['area_logistica_id'],
             id
         )
         if content:

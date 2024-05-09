@@ -3,35 +3,35 @@ from flask_cors import CORS,cross_origin
 from psycopg2 import InternalError,Error
 
 # Importamos el model logistica, su ruta
-from models.area_logistica.equipo_model import EquipoModel
+from models.area_logistica.lotes_model import LotesModel
 
 # Decorador de endpoint
-equipo_blue_print = Blueprint('equipo_blueprint',__name__)
+lotes_blue_print = Blueprint('lotes_blueprint',__name__)
 
 # Crear un objeto para que nos ayude con la clase
-model_equipo = EquipoModel()
+model_lotes = LotesModel()
 
-@equipo_blue_print.route('/equipo',methods=['GET'])
+@lotes_blue_print.route('/lotes',methods=['GET'])
 @cross_origin()
-def getEquipo():
+def getLotes():
     try:
-        content = model_equipo.getEquipo()
+        content = model_lotes.getLotes()
         return jsonify(content),200
     except Exception as e:
         return jsonify({'error controller':str(e)}),500
 
-@equipo_blue_print.route('/equipo',methods=['POST'])
+
+@lotes_blue_print.route('/lotes',methods=['POST'])
 @cross_origin()
-def postEquipo():
+def postLotes():
     try:
-        content = model_equipo.createEquipo(
-            request.json['stock'],
-            request.json['fecha'],
-            request.json['descripcion'],
+        content = model_lotes.createLotes(
             request.json['cantidad'],
-            request.json['codigo'],
-            request.json['nombre'],
-            request.json['almacen_id']
+            request.json['fecha_vencimiento'],
+            request.json['fecha_produccion'],
+            request.json['hora_produccion'],
+            request.json['almacen_id'],
+            request.json['producto_id']
         )
         if content:
             return content
@@ -44,11 +44,12 @@ def postEquipo():
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['DELETE'])
+
+@lotes_blue_print.route('/lotes/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteEquipo(id):
+def deleteLotes(id):
     try:
-        content = model_equipo.deleteEquipo(id)
+        content = model_lotes.deleteLotes(id)
         if content:
             return content
         else:
@@ -60,15 +61,16 @@ def deleteEquipo(id):
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['PUT'])
+
+@lotes_blue_print.route('/lotes/<int:id>',methods=['PUT'])
 @cross_origin()
-def putEquipo(id):
+def putLotes(id):
     try:
-        content = model_equipo.updateEquipo(
-            id,
-            request.json['cantidad'],
-            request.json['stock'],
-            request.json['almacen_id']
+        content = model_lotes.updateLotes(
+            request.json['nombre'],
+            request.json['ubicacion'],
+            request.json['area_logistica_id'],
+            id
         )
         if content:
             return content

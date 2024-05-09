@@ -32,7 +32,8 @@ class SubareaModel:
                 contenido = {
                     'id':row[0],
                     'nombre':row[1],
-                    'responsable':row[2]
+                    'responsable':row[2],
+                    'area_logistica_id':row[3]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -47,7 +48,7 @@ class SubareaModel:
             if conn:
                 conn.close()
 
-    def createSubarea(self,nombre,responsable):
+    def createSubarea(self,nombre,responsable,area_logistica_id):
         conn = None
         cursor = None
         try:
@@ -55,8 +56,8 @@ class SubareaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO logistica.subarea (nombre,responsable) VALUES (%s,%s);
-            """,(nombre,responsable)
+            INSERT INTO logistica.subarea (nombre,responsable,area_logistica_id) VALUES (%s,%s,%s);
+            """,(nombre,responsable,area_logistica_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Subarea created successfully'}),201
@@ -103,7 +104,7 @@ class SubareaModel:
             if conn:
                 conn.close()
     
-    def updateSubarea(self,responsable,id):
+    def updateSubarea(self,responsable,id,area_logistica_id):
         conn = None
         cursor = None
         try:
@@ -111,8 +112,8 @@ class SubareaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.subarea SET responsable=%s WHERE id=%s;
-            """,(responsable,id)
+            UPDATE logistica.subarea SET responsable=%s,area_logistica_id=%s WHERE id=%s;
+            """,(responsable,area_logistica_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Subarea updated successfully'}),200

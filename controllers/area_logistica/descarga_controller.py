@@ -3,35 +3,32 @@ from flask_cors import CORS,cross_origin
 from psycopg2 import InternalError,Error
 
 # Importamos el model logistica, su ruta
-from models.area_logistica.equipo_model import EquipoModel
+from models.area_logistica.descarga_model import DescargaModel
 
 # Decorador de endpoint
-equipo_blue_print = Blueprint('equipo_blueprint',__name__)
+descarga_blue_print = Blueprint('descarga_blueprint',__name__)
 
 # Crear un objeto para que nos ayude con la clase
-model_equipo = EquipoModel()
+model_descarga = DescargaModel()
 
-@equipo_blue_print.route('/equipo',methods=['GET'])
+@descarga_blue_print.route('/descarga',methods=['GET'])
 @cross_origin()
-def getEquipo():
+def getDescarga():
     try:
-        content = model_equipo.getEquipo()
+        content = model_descarga.getDescarga()
         return jsonify(content),200
     except Exception as e:
         return jsonify({'error controller':str(e)}),500
 
-@equipo_blue_print.route('/equipo',methods=['POST'])
+
+@descarga_blue_print.route('/descarga',methods=['POST'])
 @cross_origin()
-def postEquipo():
+def postDescarga():
     try:
-        content = model_equipo.createEquipo(
-            request.json['stock'],
-            request.json['fecha'],
-            request.json['descripcion'],
-            request.json['cantidad'],
-            request.json['codigo'],
-            request.json['nombre'],
-            request.json['almacen_id']
+        content = model_descarga.createDescarga(
+            request.json['fecha_descarga'],
+            request.json['mermas'],
+            request.json['vehiculo_id']
         )
         if content:
             return content
@@ -44,11 +41,12 @@ def postEquipo():
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['DELETE'])
+
+@descarga_blue_print.route('/descarga/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteEquipo(id):
+def deleteDescarga(id):
     try:
-        content = model_equipo.deleteEquipo(id)
+        content = model_descarga.deleteDescarga(id)
         if content:
             return content
         else:
@@ -60,15 +58,14 @@ def deleteEquipo(id):
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['PUT'])
+
+@descarga_blue_print.route('/descarga/<int:id>',methods=['PUT'])
 @cross_origin()
-def putEquipo(id):
+def putDescarga(id):
     try:
-        content = model_equipo.updateEquipo(
-            id,
-            request.json['cantidad'],
-            request.json['stock'],
-            request.json['almacen_id']
+        content = model_descarga.updateDescarga(
+            request.json['mermas'],
+            id
         )
         if content:
             return content

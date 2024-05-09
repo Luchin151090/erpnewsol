@@ -33,7 +33,8 @@ class AlmacenModel:
                 contenido = {
                     'id':row[0],
                     'nombre':row[1],
-                    'ubicacion':row[2]
+                    'ubicacion':row[2],
+                    'area_logistica_id':row[3],
                 }
                 datos.append(contenido)
                 contenido={}
@@ -48,7 +49,7 @@ class AlmacenModel:
             if conn:
                 conn.close()
 
-    def createAlmacen(self,nombre,ubicacion):
+    def createAlmacen(self,nombre,ubicacion,area_logistica_id):
         conn = None
         cursor = None
         try:
@@ -57,8 +58,8 @@ class AlmacenModel:
             cursor.execute(
             """
             INSERT INTO logistica.almacen
-              (nombre,ubicacion) VALUES (%s,%s);
-            """,(nombre,ubicacion)
+              (nombre,ubicacion,area_logistica_id) VALUES (%s,%s,%s);
+            """,(nombre,ubicacion,area_logistica_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Almacen created successfully'}),201
@@ -105,7 +106,7 @@ class AlmacenModel:
             if conn:
                 conn.close()
     
-    def updateAlmacen(self,nombre,ubicacion,id):
+    def updateAlmacen(self,nombre,ubicacion,area_logistica_id,id):
         conn = None
         cursor = None
         try:
@@ -113,8 +114,8 @@ class AlmacenModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE logistica.almacen SET nombre=%s,ubicacion=%s WHERE id=%s;
-            """,(nombre,ubicacion,id)
+            UPDATE logistica.almacen SET nombre=%s,ubicacion=%s,area_logistica_id=%s WHERE id=%s;
+            """,(nombre,ubicacion,area_logistica_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Almacen updated successfully'}),200

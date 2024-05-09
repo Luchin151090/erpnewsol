@@ -102,7 +102,7 @@ ALTER TABLE logistica.equipo_herramienta ADD CONSTRAINT fk_equipo_almacen FOREIG
 ALTER TABLE logistica.lotes ADD CONSTRAINT fk_lotes_almacen FOREIGN KEY(almacen_id) REFERENCES logistica.almacen (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE logistica.lotes ADD CONSTRAINT fk_lotes_producto FOREIGN KEY(producto_id) REFERENCES logistica.producto (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE logistica.descarga ADD CONSTRAINT fk_descarga_vehiculo FOREIGN KEY(vehiculo_id) REFERENCES logistica.vehiculo (id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE logistica.producto ADD CONSTRAINT fk_producto_descarga FOREIGN KEY() REFERENCES logistica.almacen (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE logistica.producto ADD CONSTRAINT fk_producto_descarga FOREIGN KEY(descarga_id) REFERENCES logistica.almacen (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 

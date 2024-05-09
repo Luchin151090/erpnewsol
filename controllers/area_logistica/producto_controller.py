@@ -3,35 +3,31 @@ from flask_cors import CORS,cross_origin
 from psycopg2 import InternalError,Error
 
 # Importamos el model logistica, su ruta
-from models.area_logistica.equipo_model import EquipoModel
+from models.area_logistica.producto_model import ProductoModel
 
 # Decorador de endpoint
-equipo_blue_print = Blueprint('equipo_blueprint',__name__)
+producto_blue_print = Blueprint('producto_blueprint',__name__)
 
 # Crear un objeto para que nos ayude con la clase
-model_equipo = EquipoModel()
+model_producto = ProductoModel()
 
-@equipo_blue_print.route('/equipo',methods=['GET'])
+@producto_blue_print.route('/producto',methods=['GET'])
 @cross_origin()
-def getEquipo():
+def getProducto():
     try:
-        content = model_equipo.getEquipo()
+        content = model_producto.getProducto()
         return jsonify(content),200
     except Exception as e:
         return jsonify({'error controller':str(e)}),500
 
-@equipo_blue_print.route('/equipo',methods=['POST'])
+
+@producto_blue_print.route('/producto',methods=['POST'])
 @cross_origin()
-def postEquipo():
+def postProducto():
     try:
-        content = model_equipo.createEquipo(
-            request.json['stock'],
-            request.json['fecha'],
-            request.json['descripcion'],
-            request.json['cantidad'],
-            request.json['codigo'],
+        content = model_producto.createProducto(
             request.json['nombre'],
-            request.json['almacen_id']
+            request.json['descarga_id']
         )
         if content:
             return content
@@ -44,11 +40,12 @@ def postEquipo():
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['DELETE'])
+
+@producto_blue_print.route('/producto/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteEquipo(id):
+def deleteProducto(id):
     try:
-        content = model_equipo.deleteEquipo(id)
+        content = model_producto.deleteProducto(id)
         if content:
             return content
         else:
@@ -60,15 +57,15 @@ def deleteEquipo(id):
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@equipo_blue_print.route('/equipo/<int:id>',methods=['PUT'])
+
+@producto_blue_print.route('/producto/<int:id>',methods=['PUT'])
 @cross_origin()
-def putEquipo(id):
+def putProducto(id):
     try:
-        content = model_equipo.updateEquipo(
-            id,
-            request.json['cantidad'],
-            request.json['stock'],
-            request.json['almacen_id']
+        content = model_producto.updateProducto(
+            request.json['nombre'],
+            request.json['descarga_id'],
+            id
         )
         if content:
             return content
