@@ -28,7 +28,8 @@ def postFvac():
         content = model_fvac.createReporte(
             request.json['monto_ingreso'],
             request.json['monto_salida'],
-            request.json['fecha']
+            request.json['fecha'],
+            request.json['area_finanzas_id']
         )
         if content:
             return content
@@ -67,7 +68,8 @@ def updateFvac(id):
             id,
             request.json['monto_ingreso'],
             request.json['monto_salida'],
-            request.json['fecha']
+            request.json['fecha'],
+            request.json['area_finanzas_id']
         )
         if content:
             return content

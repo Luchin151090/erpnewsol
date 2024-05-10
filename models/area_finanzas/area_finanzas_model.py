@@ -2,35 +2,31 @@ from config import PostgresSQLPool, begin
 from psycopg2 import DataError, IntegrityError
 from flask import request, jsonify
 import traceback
+import psycopg2.pool
 
-class FvacModel:
+class FinanzasModel:
     def __init__(self):
         self.db_pool = PostgresSQLPool()
-      
-    def getReporte(self):
+
+    def getFinanzas(self):
         conn = None
         cursor = None
         try:
             conn = begin()
             cursor = conn.cursor()
-
+            # sql
             query = cursor.execute(
-                """
-                SELECT * FROM finanzas.fvac;
-                """
+                """SELECT * FROM area.area_finanzas;"""
             )
-            # LISTA PARA RECIBIR LA DATA
+            # data
             data = cursor.fetchall()
             datos = list()
             contenido = dict()
             for row in data:
-                contenido = {
+                contenido ={
                     'id':row[0],
-                    'monto_ingreso':row[1],
-                    'monto_salida':row[2],
-                    'fecha':row[3],
-                    'area_finanzas_id':row[4]
-                   
+                    'nombre':row[1],
+                    'area_id':row[2]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -45,21 +41,20 @@ class FvacModel:
             if conn:
                 conn.close()
 
-    def createReporte(self,monto_ingreso,monto_salida,fecha,area_finanzas_id):
+    def createFinanzas(self,nombre,area_id):
         conn = None
         cursor = None
         try:
             conn = begin()
             cursor = conn.cursor()
             cursor.execute(
-            """
-            INSERT INTO finanzas.fvac
-            (monto_ingreso,monto_salida,fecha,area_finanzas_id)
-              VALUES (%s,%s,%s);
-            """,(monto_ingreso,monto_salida,fecha,area_finanzas_id)
+                """
+                INSERT INTO area.area_finanzas(nombre,area_id)
+                VALUES(%s,%s,%s,%s);
+                """,(nombre,area_id)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Reporte created successfully'}),201
+            return jsonify({'mensaje': 'Finanzas created successfully'}),201
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -74,8 +69,8 @@ class FvacModel:
                 cursor.close()
             if conn:
                 conn.close()
-        
-    def deleteReporte(self,id):
+
+    def deleteFinanzas(self,id):
         conn = None
         cursor = None
         try:
@@ -83,11 +78,11 @@ class FvacModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            DELETE FROM finanzas.fvac WHERE id = %s;
+            DELETE FROM area.area_finanzas WHERE id = %s;
             """,(id,)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Fvac delete successfully'}),200
+            return jsonify({'mensaje': 'Finanzas delete successfully'}),200
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -102,8 +97,8 @@ class FvacModel:
                 cursor.close()
             if conn:
                 conn.close()
-    
-    def updateReporte(self,id,monto_ingreso,monto_salida,fecha,area_finanzas_id):
+
+    def updateFinanzas(self,id,nombre,area_id):
         conn = None
         cursor = None
         try:
@@ -111,12 +106,11 @@ class FvacModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE finanzas.fvac SET 
-            monto_ingreso=%s,monto_salida=%s,fecha=%s,area_finanzas_id=%s WHERE id=%s;
-            """,(monto_ingreso,monto_salida,fecha,area_finanzas_id,id)
+            UPDATE finanzas.caja SET nombre =%s, area_id=%s WHERE id=%s;
+            """,(nombre,area_id,id)
             )
             conn.commit()
-            return jsonify({'mensaje': 'Reporte updated successfully'}),200
+            return jsonify({'mensaje': 'Finanzas updated successfully'}),200
         except DataError as e:  # Captura específicamente el error de tipo de dato incorrecto
             traceback.print_exc()
             return jsonify({'error': 'DataError: ' + str(e)}),400
@@ -133,4 +127,4 @@ class FvacModel:
                 conn.close()
 
 if __name__=="__main__":
-    reporte_model = FvacModel()
+    finanza = FinanzasModel()

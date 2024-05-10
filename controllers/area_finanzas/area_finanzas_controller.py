@@ -1,37 +1,33 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS, cross_origin
-import psycopg2
 from psycopg2 import InternalError,Error
 # Importamos model de asistencia
-from models.area_finanzas.controlasistencia_model import ControlAsistenciaModel
 
+from models.area_finanzas.area_finanzas_model import FinanzasModel
 # Decorador de endpoint
-asistencia_blue_print = Blueprint('asistencia_blueprint',__name__)
+caja_blue_print = Blueprint('caja_blueprint',__name__)
 
 #Crear un objeto que nos ayude a traer la data
-model_asistencia = ControlAsistenciaModel()
+model_finanzas = FinanzasModel()
 
-@asistencia_blue_print.route('/asistencia',methods=['GET'])
+@caja_blue_print.route('/finanzas',methods=['GET'])
 @cross_origin()
-def getAsistencia():
+def getFinanza():
     try:       
-        content = model_asistencia.getAsistencia()
+        content = model_finanzas.getFinanzas()
         return jsonify(content),200
     except Exception as e:
-        return jsonify({'error controller': str(e)}), 500
+        return jsonify({'error controller':str(e)}),500
   
 
-@asistencia_blue_print.route('/asistencia', methods=['POST'])
+@caja_blue_print.route('/finanzas',methods=['POST'])
 @cross_origin()
-def postAsistencia():
+def postFinanza():
     try:
-        content = model_asistencia.createAsistencia(
-        request.json['hora_ingreso'],
-        request.json['hora_salida'],
-        request.json['fecha'],
-        request.json['nombre_empleado'],
-        request.json['cantidad_horas'],
-        request.json['area_finanzas_id'])
+        content = model_finanzas.createFinanzas(
+            request.json['nombre'],
+            request.json['area_id']
+        )
         if content:
             return content
         else:
@@ -43,11 +39,11 @@ def postAsistencia():
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@asistencia_blue_print.route('/asistencia/<int:id>',methods=['DELETE'])
+@caja_blue_print.route('/finanzas/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteAsistencia(id):
+def deleteFinanza(id):
     try:
-        content = model_asistencia.deleteAsistencia(id)
+        content = model_finanzas.deleteFinanzas(id)
         if content:
             return content
         else:
@@ -61,17 +57,14 @@ def deleteAsistencia(id):
         
     
 
-@asistencia_blue_print.route('/asistencia/<int:id>', methods=['PUT'])
+@caja_blue_print.route('/finanzas/<int:id>',methods=['PUT'])
 @cross_origin()
-def updateAsistencia(id):
+def updateFinanza(id):
     try:
-        content = model_asistencia.updateAsistencia(
-            request.json['hora_ingreso'],
-            request.json['hora_salida'],
-            request.json['fecha'],
-            request.json['nombre_empleado'],
-            request.json['cantidad_horas'],
-            request.json['area_finanzas_id']
+        content = model_finanzas.updateFinanzas(
+            id,
+            request.json['nombre'],
+            request.json['area_id']
         )
         if content:
             return content

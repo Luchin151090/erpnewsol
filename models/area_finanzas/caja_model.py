@@ -28,7 +28,7 @@ class CajaModel:
                     'nombre_caja':row[1],
                     'saldo_final':row[2],
                     'saldo_inicial':row[3],
-                    'caja_id':row[4]
+                    'area_finanzas_id':row[4]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -43,7 +43,7 @@ class CajaModel:
             if conn:
                 conn.close()
 
-    def createCaja(self,nombre_caja,saldo_final,saldo_inicial,caja_id):
+    def createCaja(self,nombre_caja,saldo_final,saldo_inicial,area_finanzas_id):
         conn = None
         cursor = None
         try:
@@ -51,9 +51,9 @@ class CajaModel:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO finanzas.caja(nombre_caja,saldo_final,saldo_inicial,caja_id)
+                INSERT INTO finanzas.caja(nombre_caja,saldo_final,saldo_inicial,area_finanzas_id)
                 VALUES(%s,%s,%s,%s);
-                """,(nombre_caja,saldo_final,saldo_inicial,caja_id)
+                """,(nombre_caja,saldo_final,saldo_inicial,area_finanzas_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Caja created successfully'}),201
@@ -100,7 +100,7 @@ class CajaModel:
             if conn:
                 conn.close()
 
-    def updateCaja(self,id,nombre_caja,saldo_final,saldo_inicial,caja_id):
+    def updateCaja(self,id,nombre_caja,saldo_final,saldo_inicial,area_finanzas_id):
         conn = None
         cursor = None
         try:
@@ -108,8 +108,8 @@ class CajaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE finanzas.caja SET nombre_caja=%s,saldo_final=%s,saldo_inicial=%s,caja_id=%s WHERE id=%s;
-            """,(nombre_caja,saldo_final,saldo_inicial,caja_id,id)
+            UPDATE finanzas.caja SET nombre_caja=%s,saldo_final=%s,saldo_inicial=%s,area_finanzas_id=%s WHERE id=%s;
+            """,(nombre_caja,saldo_final,saldo_inicial,area_finanzas_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Caja updated successfully'}),200
@@ -129,4 +129,4 @@ class CajaModel:
                 conn.close()
 
 if __name__=="__main__":
-    pass
+    caja = CajaModel()

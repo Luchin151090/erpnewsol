@@ -30,7 +30,8 @@ class ControlAsistenciaModel:
                     'hora_salida':row[2].strftime('%H:%M:%S'),
                     'fecha':row[3],
                     'nombre_empleado':row[4],
-                    'cantidad_horas':row[5]
+                    'cantidad_horas':row[5],
+                    'area_finanzas_id':row[6]
                 }
                 datos.append(contenido)
                 contenido={}
@@ -44,7 +45,7 @@ class ControlAsistenciaModel:
             if conn:
                 conn.close()
 
-    def createAsistencia(self,hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas):
+    def createAsistencia(self,hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id):
         conn = None
         cursor = None
         try:
@@ -52,9 +53,9 @@ class ControlAsistenciaModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            INSERT INTO finanzas.control_asistencia(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas)
+            INSERT INTO finanzas.control_asistencia(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id)
               VALUES (%s,%s,%s,%s,%s);
-            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas)
+            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Asistencia created successfully'}),201
@@ -101,7 +102,7 @@ class ControlAsistenciaModel:
             if conn:
                 conn.close()
     
-    def updateAsistencia(self,id,hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas):
+    def updateAsistencia(self,id,hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id):
         conn = None
         cursor = None
         try:
@@ -110,8 +111,8 @@ class ControlAsistenciaModel:
             cursor.execute(
             """
             UPDATE finanzas.control_asistencia SET 
-            hora_ingreso=%s,hora_salida=%s,fecha=%s,nombre_empleado=%s,cantidad_horas=%s WHERE id=%s;
-            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,id)
+            hora_ingreso=%s,hora_salida=%s,fecha=%s,nombre_empleado=%s,cantidad_horas=%s,area_finanzas_id=%s WHERE id=%s;
+            """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id,id)
             )
             conn.commit()
             return jsonify({'mensaje': 'Asistencia updated successfully'}),200

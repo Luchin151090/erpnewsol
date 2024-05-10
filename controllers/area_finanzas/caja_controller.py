@@ -19,7 +19,6 @@ def getCaja():
     except Exception as e:
         return jsonify({'error controller':str(e)}),500
   
-
 @caja_blue_print.route('/caja',methods=['POST'])
 @cross_origin()
 def postCaja():
@@ -28,7 +27,7 @@ def postCaja():
             request.json['nombre_caja'],
             request.json['saldo_final'],
             request.json['saldo_inicial'],
-            request.json['caja_id']
+            request.json['area_finanzas_id']
         )
         if content:
             return content
@@ -56,9 +55,7 @@ def deleteCaja(id):
         return jsonify({'error':'error basse de datos '+str(e)}),500
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
-        
-    
-
+            
 @caja_blue_print.route('/caja/<int:id>',methods=['PUT'])
 @cross_origin()
 def updateCaja(id):
@@ -68,7 +65,7 @@ def updateCaja(id):
             request.json['nombre_caja'],
             request.json['saldo_final'],
             request.json['saldo_inicial'],
-            request.json['caja_id'] 
+            request.json['area_finanzas_id'] 
         )
         if content:
             return content

@@ -27,7 +27,6 @@ CREATE TABLE finanzas.caja(
     nombre_caja varchar(200),
     saldo_final float,
     saldo_inicial float,
-    caja_id int,
     area_finanzas_id int
 );
 
