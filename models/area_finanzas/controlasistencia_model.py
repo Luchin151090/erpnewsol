@@ -54,7 +54,7 @@ class ControlAsistenciaModel:
             cursor.execute(
             """
             INSERT INTO finanzas.control_asistencia(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id)
-              VALUES (%s,%s,%s,%s,%s);
+              VALUES (%s,%s,%s,%s,%s,%s);
             """,(hora_ingreso,hora_salida,fecha,nombre_empleado,cantidad_horas,area_finanzas_id)
             )
             conn.commit()

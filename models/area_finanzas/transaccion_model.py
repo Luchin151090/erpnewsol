@@ -108,7 +108,7 @@ class TransaccionModel:
             cursor = conn.cursor()
             cursor.execute(
             """
-            UPDATE finanzas.transaccion SET fecha_na=%s,saldo_final=%s,saldo_inicial=%s,area_finanzas_id=%s WHERE id=%s;
+            UPDATE finanzas.transaccion SET fecha_transaccion=%s,monto=%s,caja_origen=%s,caja_destino=%s WHERE id=%s;
             """,(fecha_transaccion,monto,caja_origen,caja_destino,id)
             )
             conn.commit()

@@ -50,7 +50,7 @@ class FinanzasModel:
             cursor.execute(
                 """
                 INSERT INTO area.area_finanzas(nombre,area_id)
-                VALUES(%s,%s,%s,%s);
+                VALUES(%s,%s);
                 """,(nombre,area_id)
             )
             conn.commit()

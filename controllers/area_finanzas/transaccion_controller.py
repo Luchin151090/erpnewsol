@@ -1,32 +1,35 @@
 from flask import Blueprint,request,jsonify
 from flask_cors import CORS, cross_origin
 from psycopg2 import InternalError,Error
-# Importamos model de asistencia
 
-from models.area_finanzas.area_finanzas_model import FinanzasModel
+# Importamos model de asistencia
+from models.area_finanzas.transaccion_model import TransaccionModel
+
 # Decorador de endpoint
-area_finanzas_blue_print = Blueprint('area_finanzas_blueprint',__name__)
+transaccion_blue_print = Blueprint('transaccion_blueprint',__name__)
 
 #Crear un objeto que nos ayude a traer la data
-model_finanzas = FinanzasModel()
+model_transaccion = TransaccionModel()
 
-@area_finanzas_blue_print.route('/finanzas',methods=['GET'])
+@transaccion_blue_print.route('/transaccion',methods=['GET'])
 @cross_origin()
-def getFinanza():
+def getFvac():
     try:       
-        content = model_finanzas.getFinanzas()
+        content = model_transaccion.getTransaccion()
         return jsonify(content),200
     except Exception as e:
         return jsonify({'error controller':str(e)}),500
   
 
-@area_finanzas_blue_print.route('/finanzas',methods=['POST'])
+@transaccion_blue_print.route('/transaccion',methods=['POST'])
 @cross_origin()
-def postFinanza():
+def postFvac():
     try:
-        content = model_finanzas.createFinanzas(
-            request.json['nombre'],
-            request.json['area_id']
+        content = model_transaccion.createTransaccion(
+            request.json['fecha_transaccion'],
+            request.json['monto'],
+            request.json['caja_origen'],
+            request.json['caja_destino']
         )
         if content:
             return content
@@ -39,11 +42,11 @@ def postFinanza():
     except Exception as e:
         return jsonify({'error controller': str(e)}), 500
 
-@area_finanzas_blue_print.route('/finanzas/<int:id>',methods=['DELETE'])
+@transaccion_blue_print.route('/transaccion/<int:id>',methods=['DELETE'])
 @cross_origin()
-def deleteFinanza(id):
+def deleteFvac(id):
     try:
-        content = model_finanzas.deleteFinanzas(id)
+        content = model_transaccion.deleteTransaccion(id)
         if content:
             return content
         else:
@@ -57,14 +60,16 @@ def deleteFinanza(id):
         
     
 
-@area_finanzas_blue_print.route('/finanzas/<int:id>',methods=['PUT'])
+@transaccion_blue_print.route('/transaccion/<int:id>',methods=['PUT'])
 @cross_origin()
-def updateFinanza(id):
+def updateFvac(id):
     try:
-        content = model_finanzas.updateFinanzas(
+        content = model_transaccion.updateTransaccion(
             id,
-            request.json['nombre'],
-            request.json['area_id']
+            request.json['fecha_transaccion'],
+            request.json['monto'],
+            request.json['caja_origen'],
+            request.json['caja_destino']
         )
         if content:
             return content

@@ -55,7 +55,7 @@ class FvacModel:
             """
             INSERT INTO finanzas.fvac
             (monto_ingreso,monto_salida,fecha,area_finanzas_id)
-              VALUES (%s,%s,%s);
+              VALUES (%s,%s,%s,%s);
             """,(monto_ingreso,monto_salida,fecha,area_finanzas_id)
             )
             conn.commit()

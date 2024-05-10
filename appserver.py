@@ -14,10 +14,11 @@ from controllers.area_logistica.lotes_controller import lotes_blue_print as lote
 from controllers.area_logistica.producto_controller import producto_blue_print as producto
 from controllers.area_logistica.vehiculo_controller import vehiculo_blue_print as vehiculo
 # rutas-controller-finanzas
+from controllers.area_finanzas.area_finanzas_controller import area_finanzas_blue_print as area_finanzas
 from controllers.area_finanzas.controlasistencia_controller import asistencia_blue_print as asistencia
 from controllers.area_finanzas.caja_controller import caja_blue_print as caja
 from controllers.area_finanzas.fvac_controller import fvac_blue_print as fvac
-
+from controllers.area_finanzas.transaccion_controller import transaccion_blue_print as transaccion
 
 # Cargar variables de entorno
 load_dotenv()
@@ -36,9 +37,11 @@ app.register_blueprint(lotes,url_prefix='/api')
 app.register_blueprint(producto,url_prefix='/api')
 app.register_blueprint(vehiculo,url_prefix='/api')
 ##finanzas
+app.register_blueprint(area_finanzas,url_prefix='/api')
 app.register_blueprint(caja,url_prefix='/api')
 app.register_blueprint(asistencia,url_prefix='/api')
 app.register_blueprint(fvac,url_prefix='/api')
+app.register_blueprint(transaccion,url_prefix='/api')
 
 # middlewares 
 # Más control de los verbos http
